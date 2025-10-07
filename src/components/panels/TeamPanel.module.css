@@ -1,0 +1,178 @@
+.panel {
+  position: relative;              /* popover için referans */
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(14,21,43,0.85);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px;
+  backdrop-filter: blur(4px);
+  color: #e5e7eb;
+
+  /* kapsayıcılık + taşmayı kontrol */
+  max-height: calc(100vh - 32px);
+  overflow: hidden;                /* dışarı taşmayı engelle */
+}
+
+.scroll {
+  /* panel içeriği buraya; dikey scroll bu kapsayıcıda */
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;              /* scrollbar üstü boşluk */
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.teamName {
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: #e5e7eb;
+  padding: 0 8px;
+  width: 100%;
+}
+
+.colorTrigger {
+  height: 32px;
+  min-width: 44px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.colorSwatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.35);
+}
+
+/* POPOVER */
+.popover {
+  position: absolute;
+  z-index: 15;
+  top: 48px;         /* header altına */
+  left: 10px;        /* panel içinden aç */
+  width: 220px;
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.palette {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.paletteDot {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  cursor: pointer;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tab {
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: #e5e7eb;
+  cursor: pointer;
+}
+.active {
+  outline: 2px solid rgba(255,255,255,0.8);
+}
+
+.tactics { display: flex; flex-direction: column; gap: 10px; }
+
+
+
+/* KALDIR: .formSelect, .applyBtn  (artık lazım değil) */
+
+.quickButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* istersen 3 sütun: repeat(3, 1fr) */
+  gap: 6px;
+}
+
+.quickBtn {
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #e5e7eb;
+  cursor: pointer;
+  width: 100%;
+}
+
+.quickBtnActive {
+  outline: 2px solid rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.12);
+}
+
+
+.playersTab { display: flex; flex-direction: column; gap: 10px; }
+
+.addRow {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 6px;
+}
+.numInput, .nameInput {
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: #e5e7eb;
+  padding: 0 8px;
+  width: 100%;
+}
+.addBtn, .removeBtn {
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.1);
+  color: #e5e7eb;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  /* liste çok uzarsa sadece burası scroll olur */
+  max-height: 42vh;
+  overflow: auto;
+}
+.row {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 6px;
+  align-items: center;
+}

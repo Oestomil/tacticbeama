@@ -1,0 +1,194 @@
+/* src/components/DrawToolbar.module.css */
+
+/* ——— Temel (desktop/tablet) ——— */
+.toolbar {
+  position: sticky;          /* header altında yapışkan */
+  top: 64px;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0;
+  pointer-events: none;      /* yalnızca içerik tıklansın */
+  background: transparent;   /* alan kaplamasın */
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 1024px;
+  padding: 0 12px;
+  margin: 0 auto;
+  overflow-x: auto;              /* dar alanda kaydırma */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  pointer-events: auto;          /* butonlar tıklanabilir */
+}
+.row::-webkit-scrollbar { display: none; }
+
+.group {
+  display: flex;
+  gap: 8px;
+  background: rgba(14,21,43,0.75);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+  padding: 8px;
+  border-radius: 12px;
+}
+
+/* ——— Butonlar ——— */
+.btn,
+.btnGhost {
+  height: 44px;                  /* parmak dostu */
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  touch-action: manipulation;     /* double-tap zoom’u azaltır */
+  transition: transform 0.08s ease, background 0.12s ease, border-color 0.12s ease;
+}
+.btnGhost { background: rgba(255,255,255,0.04); }
+
+.btn:active,
+.btnGhost:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.active,
+.btn[aria-pressed="true"] {
+  outline: 2px solid rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.16);
+}
+
+/* ——— Toggle ——— */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  color: #cbd5e1;
+  white-space: nowrap;
+}
+
+.toggle input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #fbbf24;         /* amber */
+}
+
+/* Hover (yalnızca pointer’lı cihazlar) */
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover,
+  .btnGhost:hover {
+    border-color: rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.12);
+  }
+}
+
+/* Tablet/desktop ufak rötuşlar */
+@media (min-width: 768px) {
+  .group { border-radius: 14px; }
+  .btn, .btnGhost { height: 40px; }
+}
+
+/* ——— Mobil: dock sistemi (top/bottom/auto) ———
+   TSX’te .toolbar’a bu sınıflardan biri eklenir:
+   .isAutoMobile (varsayılan alt), .isTopMobile (üst), .isBottomMobile (alt)
+   offsetTop/offsetBottom CSS değişkenleri React’ten gelir.
+————————————————————————————————————————— */
+@media (max-width: 640px) {
+  .toolbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 40;                 /* gerekirse 60 yapabilirsin */
+    pointer-events: none;
+    padding: 0;                  /* alan kaplamasın */
+    background: transparent;
+  }
+
+  /* Sadece konum ver — yükseklik/padding burada yok */
+  .isAutoMobile,
+  .isBottomMobile { bottom: 0; top: auto; }
+  .isTopMobile    { top: 0;    bottom: auto; }
+
+  /* Görünen bar: arka plan/padding burada, toolbar’da değil */
+  .row {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+
+    background: rgba(14,21,43,0.90);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+
+    /* Güvenli alan + offset’ler */
+    padding:
+      6px
+      calc(env(safe-area-inset-right, 0px) + 12px)
+      6px
+      calc(env(safe-area-inset-left, 0px) + 12px);
+
+    /* Üst/alt dock’a göre boşluklar (sayfayı kaplamasın) */
+    margin:
+      calc(var(--offset-top, 0px) + env(safe-area-inset-top, 0px) + 8px)
+      auto
+      calc(var(--offset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 8px);
+
+    /* İçerik kadar genişle ama ekrana sığdır */
+    width: max-content;
+    max-width: calc(100% - 24px);
+
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    pointer-events: auto; /* butonlar tıklansın */
+  }
+  .row::-webkit-scrollbar { display: none; }
+
+  /* Grup ve butonlar mobil ölçülendirme */
+  .group {
+    padding: 6px;
+    border-radius: 12px;
+    background: transparent; /* arka planı row taşıyor */
+    border: none;            /* çifte kenarlık olmasın */
+    gap: 8px;
+  }
+
+  .btn, .btnGhost {
+    height: 48px;
+    padding: 0 16px;
+    font-size: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06);
+  }
+
+  /* Üst dock için bar’ı biraz aşağıda göster */
+  .isTopMobile .row {
+    margin-top: calc(var(--offset-top, 0px) + env(safe-area-inset-top, 0px) + 8px);
+    margin-bottom: 8px;
+  }
+
+  /* Alt dock için bar’ı biraz yukarıda göster */
+  .isAutoMobile .row,
+  .isBottomMobile .row {
+    margin-top: 8px;
+    margin-bottom: calc(var(--offset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 8px);
+  }
+}
+
+/* ——— Erişilebilirlik ——— */
+.btn:focus-visible,
+.btnGhost:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}

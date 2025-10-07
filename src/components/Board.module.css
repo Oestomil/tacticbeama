@@ -1,0 +1,33 @@
+/* src/components/Board.module.css */
+.wrap {
+  position: center;
+  width: 100%;
+  height: 100%;          /* ⬅️ 100dvh YOK; parent ne verdiyse onu doldur */
+  padding: 0;
+  margin: 0;
+  background: transparent;  /* büyük siyah blok oluşturmasın */
+  touch-action: none;        /* mobilde çizim sırasında sayfa kaymasın */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  display: block;           /* Konva’nın defaultu inline-block */ 
+}
+
+/* Eğer shell kullandıysan: parent yüksekliğini devralsın */
+.shell {
+  height: 100%;
+  width: 100%;
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .wrap {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+}
+/* src/components/Board.module.css — embed-friendly, parent-uyumlu */
+
+

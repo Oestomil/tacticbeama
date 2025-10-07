@@ -1,18 +1,19 @@
 /* src/components/DrawToolbar.module.css */
 
-/* ——— Desktop/Tablet: sayfa akışında, header altında sticky ——— */
+/* ===================== DESKTOP / TABLET (default) ===================== */
 .toolbar {
-  position: sticky;
-  top: 64px;                 /* header’ın altına sabitlenir (Workspace içinde) */
-  z-index: 1200;             /* panel/drawer üstünde */
+  position: sticky;                     /* header altında yapış */
+  top: var(--offset-top, 64px);
+  z-index: 1200;
+
   display: flex;
   justify-content: center;
   padding: 8px 0;
-  pointer-events: none;      /* sadece içerik tıklansın */
+
   background: transparent;
+  pointer-events: none;                 /* sadece içerik tıklansın */
 }
 
-/* İçerik taşıyıcı: merkezde kompakt kapsül */
 .row {
   display: flex;
   gap: 10px;
@@ -25,10 +26,10 @@
 
   max-width: min(100%, 1080px);
   width: max-content;
+
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-
   pointer-events: auto;
 }
 .row::-webkit-scrollbar { display: none; }
@@ -54,6 +55,7 @@
 }
 .btnGhost { background: rgba(255,255,255,0.05); }
 .btn:active, .btnGhost:active { transform: translateY(1px) scale(0.99); }
+
 .btn[aria-pressed="true"] {
   outline: 2px solid rgba(255,255,255,0.9);
   background: rgba(255,255,255,0.16);
@@ -75,29 +77,35 @@
   }
 }
 
-/* ——— Mobil: viewport’a sabitle, dock’a göre üst/alt ———
-   .isAutoMobile  → default bottom
-   .isTopMobile   → top
-   .isBottomMobile→ bottom
-   offset değişkenleri TSX’ten geliyor:
-   --offset-top, --offset-bottom
-—————————————————————————————————————— */
+/* ===================== MOBIL (≤768px) ===================== */
 @media (max-width: 768px) {
   .toolbar {
-    position: fixed;     /* portal olsun/olmasın doğru yerde */
+    position: fixed;                    /* sticky değil, viewport'a sabit */
     left: 50%;
     transform: translateX(-50%);
     z-index: 2000;
-    padding: 0;
-    top: auto;           /* class’lar ayarlayacak */
-    bottom: auto;
     width: 100%;
+    padding: 0;
+
+    /* base reset: top/bottom auto; alt sınıflar ayarlayacak */
+    top: auto;
+    bottom: auto;
+
     pointer-events: none;
   }
 
-  .isTopMobile    { top: calc(var(--offset-top, 0px) + env(safe-area-inset-top, 0px) + 8px); }
+  /* 🔝 Üste sabitle (dock="top") */
+  .isTopMobile {
+    top: calc(var(--offset-top, 0px) + env(safe-area-inset-top, 0px) + 8px);
+    bottom: auto;                       /* kritik: alttan kopar */
+  }
+
+  /* 🔚 Alta sabitle (dock="bottom") veya auto (varsayılan) */
   .isBottomMobile,
-  .isAutoMobile   { bottom: calc(var(--offset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 8px); }
+  .isAutoMobile {
+    bottom: calc(var(--offset-bottom, 0px) + env(safe-area-inset-bottom, 0px) + 8px);
+    top: auto;                          /* kritik: üstten kopar */
+  }
 
   .row {
     margin: 0 auto;
@@ -118,12 +126,4 @@
 .btn:focus-visible, .btnGhost:focus-visible {
   outline: 2px solid #fbbf24;
   outline-offset: 2px;
-}
-.btnDisabled, .btnDisabled:hover, .btnDisabled:active {
-  background: #555 !important;
-  border-color: rgba(255,255,255,0.1) !important;
-  color: #888 !important;
-  cursor: not-allowed !important;
-  filter: none !important;
-  transform: none !important;
 }

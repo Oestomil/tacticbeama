@@ -190,9 +190,7 @@ export default function Workspace() {
             runCurved={runCurved}
             setRunCurved={setRunCurved}
             onClear={clearArrows}
-            dock="top"            /* kayıt paneliyle çakışıyorsa "bottom" yap */
-            offsetTop={64}        /* header/record panel yüksekliğine göre ayarla */
-            usePortal={true}      /* stacking context sorunlarını yok et */
+
           />
 
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>

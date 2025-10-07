@@ -49,3 +49,19 @@
   flex-direction: column;
   gap: 10px; /* 8 -> 10 */
 }
+/* Toolbar board’un üstünde overlay olarak görünsün */
+.boardShell :global(.toolbar) {
+  position: absolute !important;
+  top: 8px;                 /* board’un üstünden boşluk */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;              /* canvas üstüne çıksın */
+  width: auto;
+  max-width: 90%;
+  pointer-events: none;     /* sadece içeriği tıklanabilir olsun */
+}
+
+/* Buton grubu etkileşime açık kalsın */
+.boardShell :global(.row) {
+  pointer-events: auto;
+}

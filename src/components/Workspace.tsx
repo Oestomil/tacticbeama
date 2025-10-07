@@ -94,24 +94,9 @@ export default function Workspace() {
   }, []);
 
   function clearAllPlayers() {
-    setPlayers([]);            // tüm oyuncuları sil
-    setBall({ nx: 0.5, ny: 0.5 }); // topu ortaya koy
-    setArrows([]);            // okları temizle}       
-    const seeds = generateFormation(f, side as Side);
-    setPlayers((prev) => {
-      const keepOther = prev.filter((p) => p.team !== side);
-      let idx = 0;
-      const next: Player[] = seeds.map((s) => ({
-        id: `${side}_${s.number}_${idx++}_${Math.random().toString(36).slice(2, 6)}`,
-        team: side,
-        number: s.number,
-        name: s.name,
-        nx: s.nx,
-        ny: s.ny,
-      }));
-      return [...keepOther, ...next];
-    });
-    setBall({ nx: 0.5, ny: 0.5 });
+    setPlayers([]);                 // tüm oyuncuları sil
+    setBall({ nx: 0.5, ny: 0.5 });  // topu ortaya koy
+    setArrows([]);                  // tüm okları temizle
   }
 
   const setTeamName = (side: TeamID, name: string) =>
@@ -183,7 +168,7 @@ export default function Workspace() {
           formation={formTop}
           onChangeFormation={setFormTop}
           onApplyFormation={() => applyFormation("top", formTop)}
-          players={players.filter((p) => p.team === "top").map(({ id, number, name }) => ({ id, number, name }))}
+          players={players.filter((p) => p.team === "top").map(({ id, number, name }) => ({ id, number, name }))} 
           onAddPlayer={(num, nm) => addPlayer("top", num, nm)}
           onEditPlayer={editPlayer}
           onRemovePlayer={removePlayer}
@@ -205,24 +190,27 @@ export default function Workspace() {
             runCurved={runCurved}
             setRunCurved={setRunCurved}
             onClear={clearArrows}
+            dock="top"            /* kayıt paneliyle çakışıyorsa "bottom" yap */
+            offsetTop={64}        /* header/record panel yüksekliğine göre ayarla */
+            usePortal={true}      /* stacking context sorunlarını yok et */
           />
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: "12px" }}>
-      <button
-       onClick={clearAllPlayers}
-        style={{
-            background: "rgba(239,68,68,0.2)",
-            border: "1px solid rgba(239,68,68,0.4)",
-            color: "#fca5a5",
-            fontWeight: 600,
-            padding: "8px 14px",
-            borderRadius: "8px",
-            cursor: "pointer"
-            }}
-          >
-            🚮 Komple Temizle (Top Hariç)
-          </button>
-        </div>
 
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+            <button
+              onClick={clearAllPlayers}
+              style={{
+                background: "rgba(239,68,68,0.2)",
+                border: "1px solid rgba(239,68,68,0.4)",
+                color: "#fca5a5",
+                fontWeight: 600,
+                padding: "8px 14px",
+                borderRadius: 8,
+                cursor: "pointer",
+              }}
+            >
+              🚮 Komple Temizle (Top Hariç)
+            </button>
+          </div>
 
           <div className={styles.boardShell}>
             <Board
@@ -251,7 +239,7 @@ export default function Workspace() {
           formation={formBot}
           onChangeFormation={setFormBot}
           onApplyFormation={() => applyFormation("bottom", formBot)}
-          players={players.filter((p) => p.team === "bottom").map(({ id, number, name }) => ({ id, number, name }))}
+          players={players.filter((p) => p.team === "bottom").map(({ id, number, name }) => ({ id, number, name }))} 
           onAddPlayer={(num, nm) => addPlayer("bottom", num, nm)}
           onEditPlayer={editPlayer}
           onRemovePlayer={removePlayer}

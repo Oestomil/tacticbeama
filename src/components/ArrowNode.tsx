@@ -1,6 +1,5 @@
 // src/components/ArrowNode.tsx
 import { Arrow, Line } from "react-konva";
-import React from "react";
 import type { ArrowItem } from "../types/draw";
 
 export default function ArrowNode({ arrow }: { arrow: ArrowItem }) {

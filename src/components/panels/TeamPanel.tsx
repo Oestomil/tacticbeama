@@ -10,7 +10,7 @@ type Props = {
   color: string;                // fill
   onChangeTeamName: (name: string) => void;
   onPickColor: (hex: string) => void;
-  formation: FormationName;
+  formation: FormationName;     // ✅ aktif taktiği göstermek için kullanılıyor
   onChangeFormation: (f: FormationName) => void;
   onApplyFormation: () => void;
 
@@ -49,7 +49,14 @@ export default function TeamPanel({
     return () => document.removeEventListener("mousedown", onDocClick);
   }, [openPalette]);
 
-  const title = useMemo(() => side === "top" ? "Takım 1" : "Takım 2", [side]);
+  const title = useMemo(() => (side === "top" ? "Takım 1" : "Takım 2"), [side]);
+
+  // Taktik butonuna basınca: önce formasyonu set et, sonra bir “tick” sonra uygula
+  // (Parent’ta state güncellensin; aksi halde eski değeri uygular.)
+  const chooseAndApply = (f: FormationName) => {
+    onChangeFormation(f);
+    setTimeout(() => onApplyFormation(), 0);
+  };
 
   return (
     <div className={styles.panel}>
@@ -118,13 +125,14 @@ export default function TeamPanel({
 
         {tab === "tactic" ? (
           <div className={styles.tactics}>
-
             <div className={styles.quickButtons}>
               {FORMATION_LIST.map((f) => (
                 <button
-                  key={"btn_"+f}
-                  className={styles.quickBtn}
-                  onClick={() => { onChangeFormation(f); onApplyFormation(); }}
+                  key={"btn_" + f}
+                  className={`${styles.quickBtn} ${formation === f ? styles.active : ""}`}
+                  onClick={() => chooseAndApply(f)}
+                  title={formation === f ? "Seçili" : "Uygula"}
+                  aria-pressed={formation === f}
                 >
                   {f}
                 </button>
@@ -167,14 +175,21 @@ export default function TeamPanel({
                     type="number"
                     className={styles.numInput}
                     value={p.number}
-                    onChange={(e) => onEditPlayer(p.id, { number: parseInt(e.target.value || "0", 10) })}
+                    onChange={(e) =>
+                      onEditPlayer(p.id, { number: parseInt(e.target.value || "0", 10) })
+                    }
                   />
                   <input
                     className={styles.nameInput}
                     value={p.name}
                     onChange={(e) => onEditPlayer(p.id, { name: e.target.value })}
                   />
-                  <button className={styles.removeBtn} onClick={() => onRemovePlayer(p.id)}>Sil</button>
+                  <button
+                    className={styles.removeBtn}
+                    onClick={() => onRemovePlayer(p.id)}
+                  >
+                    Sil
+                  </button>
                 </div>
               ))}
             </div>

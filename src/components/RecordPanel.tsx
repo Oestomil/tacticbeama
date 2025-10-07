@@ -5,9 +5,10 @@ import styles from "./RecordPanel.module.css";
 type Props = {
   onSaveScene: () => void;
   onFinish: () => void;
+  countLabel?: string; // ✅ opsiyonel
 };
 
-export default function RecordPanel({ onSaveScene, onFinish }: Props) {
+export default function RecordPanel({ onSaveScene, onFinish, countLabel }: Props) {
   const { scenes, maxScenes, clearScenes, removeLast } = useRecorder();
   const disabled = scenes.length >= maxScenes;
 
@@ -15,7 +16,9 @@ export default function RecordPanel({ onSaveScene, onFinish }: Props) {
     <div className={styles.wrap}>
       <div className={styles.left}>
         <div className={styles.counter}>
-          Sahneler: <strong>{scenes.length}</strong> / {maxScenes}
+          {countLabel ?? (
+            <>Sahneler: <strong>{scenes.length}</strong> / {maxScenes}</>
+          )}
         </div>
       </div>
 

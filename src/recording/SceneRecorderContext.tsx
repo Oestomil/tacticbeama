@@ -1,5 +1,6 @@
 // src/recording/SceneRecorderContext.tsx
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
 import type { SceneFrame } from "../types/recording";
 
 type RecorderContextValue = {

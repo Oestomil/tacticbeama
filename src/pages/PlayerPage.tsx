@@ -151,36 +151,34 @@ export default function PlayerPage() {
     }
 
     const width = 1080;
-    theight: {
-      const height = 1920;
-      const mergedCanvas = document.createElement("canvas");
-      mergedCanvas.width = width;
-      mergedCanvas.height = height;
-      const ctx = mergedCanvas.getContext("2d")!;
+    const height = 1920; // ✅ düzeltildi
+    const mergedCanvas = document.createElement("canvas");
+    mergedCanvas.width = width;
+    mergedCanvas.height = height;
+    const ctx = mergedCanvas.getContext("2d")!;
 
-      function drawMerge() {
-        ctx.clearRect(0, 0, width, height);
-        canvasList.forEach((c: any) => ctx.drawImage(c, 0, 0, width, height));
-        requestAnimationFrame(drawMerge);
-      }
-      drawMerge();
-
-      const stream = mergedCanvas.captureStream(60);
-      const recorder = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp8" });
-      mediaRecorderRef.current = recorder;
-      chunksRef.current = [];
-
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
-      recorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: "video/webm" });
-        setLastBlob(blob);
-      };
-
-      recorder.start(200);
-      onPlay();
+    function drawMerge() {
+      ctx.clearRect(0, 0, width, height);
+      canvasList.forEach((c: any) => ctx.drawImage(c, 0, 0, width, height));
+      requestAnimationFrame(drawMerge);
     }
+    drawMerge();
+
+    const stream = mergedCanvas.captureStream(60);
+    const recorder = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp8" });
+    mediaRecorderRef.current = recorder;
+    chunksRef.current = [];
+
+    recorder.ondataavailable = (e) => {
+      if (e.data.size > 0) chunksRef.current.push(e.data);
+    };
+    recorder.onstop = () => {
+      const blob = new Blob(chunksRef.current, { type: "video/webm" });
+      setLastBlob(blob);
+    };
+
+    recorder.start(200);
+    onPlay();
   }
 
   function stopRecording() {
@@ -203,7 +201,6 @@ export default function PlayerPage() {
     <div className={styles.page}>
       {/* Sticky panel */}
       <div className={styles.topBar}>
-                {/* 🔙 ./ yoluna geri */}
         <button className={styles.btn} onClick={() => navigate(-1)}>⬅ Geri</button>
         <button
           className={`${styles.btn} ${playing ? styles.btnDisabled : ""}`}
@@ -221,8 +218,6 @@ export default function PlayerPage() {
         </button>
         <button className={styles.btn} onClick={onRestart}>⏮ Başa Al</button>
 
-
-
         <button className={styles.btn} onClick={startRecording}>⏺ Kaydı Başlat & Oynat</button>
         {lastBlob && (
           <button className={styles.btn} onClick={downloadWebM}>💾 WebM indir</button>
@@ -238,7 +233,7 @@ export default function PlayerPage() {
           teams={teams}
           onMovePlayer={() => {}}
           onMoveBall={() => {}}
-          arrows={arrows}         // 🔹 çizgiler şimdi görünecek
+          arrows={arrows}         // 🔹 çizgiler
           onAddArrow={() => {}}
           drawMode="none"
           runCurved={true}

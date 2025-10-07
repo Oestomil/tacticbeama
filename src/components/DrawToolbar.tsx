@@ -1,4 +1,6 @@
 // src/components/DrawToolbar.tsx
+import { createPortal } from "react-dom";
+import type { CSSProperties } from "react";
 import styles from "./DrawToolbar.module.css";
 import type { DrawMode } from "../types/draw";
 
@@ -11,15 +13,19 @@ type Props = {
   setRunCurved: (v: boolean) => void;
   onClear?: () => void;
 
-  /** Yeni: mobilde konumlandırma kontrolü */
+  /** Mobilde konumlandırma kontrolü */
   dock?: Dock;            // "auto" (default), "top", "bottom"
   offsetTop?: number;     // px cinsinden; header/recording panel yüksekliği
   offsetBottom?: number;  // px cinsinden; alttaki panel yüksekliği
+
+  /** İsteğe bağlı: stacking context sorunlarını bitirmek için body’ye portal et */
+  usePortal?: boolean;    // default: false
 };
 
 export default function DrawToolbar({
   mode, setMode, runCurved, setRunCurved, onClear,
-  dock = "auto", offsetTop = 64, offsetBottom = 0
+  dock = "auto", offsetTop = 64, offsetBottom = 0,
+  usePortal = false,
 }: Props) {
   const isPass = mode === "pass";
   const isRun  = mode === "run";
@@ -30,20 +36,18 @@ export default function DrawToolbar({
     dock === "bottom" ? styles.isBottomMobile :
     styles.isAutoMobile;
 
-  return (
+  const styleVars: CSSProperties = {
+    // mobil media query’lerinde kullanılan CSS değişkenleri
+    ["--offset-top" as any]:  `${offsetTop}px`,
+    ["--offset-bottom" as any]: `${offsetBottom}px`,
+  };
+
+  const content = (
     <div
       className={`${styles.toolbar} ${mobileDockClass}`}
       role="region"
       aria-label="Çizim araçları"
-      // offset’leri CSS değişkeni ile ilet (mobil media query’lerinde kullanıyoruz)
-      style={
-        { 
-          // üstte sabitlemek istersen: header/recording panel yüksekliği kadar it
-          // (sadece mobilde etkin)
-          ["--offset-top" as any]: `${offsetTop}px`,
-          ["--offset-bottom" as any]: `${offsetBottom}px`,
-        } as React.CSSProperties
-      }
+      style={styleVars}
     >
       <div className={styles.row}>
         <div className={styles.group} role="group" aria-label="Ok çizim modları">
@@ -101,4 +105,6 @@ export default function DrawToolbar({
       </div>
     </div>
   );
+
+  return usePortal ? createPortal(content, document.body) : content;
 }
